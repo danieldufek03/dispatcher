@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="app.js"></script>
 <body ng-app="myApp" ng-controller="dispatchCtrl">
+  <div class="container-fluid">
+    <div class="row">
 
-<h2>My Todo List</h2>
+    <h1>Process Dispatcher</h1>
 
-<form ng-submit="todoAdd()">
-    <input type="text" ng-model="todoInput" size="50" placeholder="Add New">
-    <input type="submit" value="Add New">
-</form>
+    <!-- <form ng-submit="todoAdd()"> -->
+    <form ng-submit="readyQueueAdd()">
+      <input type="text" ng-model="todoInput" size="50" placeholder="Add New priority">
+      <input type="submit" value="Create Process">
+    </form>
 
-<br>
+    <br>
 
-<div ng-repeat="x in todoList">
-    <p>
-    </p>
-    <input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
-</div>
+      <!--Ready Queue -->
+      <div class="col-lg-4">
+        <h2>Ready Queue</h2>
+        <div ng-repeat="x in readyQueue">
+          <p>
+            <span>processID: {{x.pid}}</span>
+            <span>priority: {{x.priority}}</span>
+          </p>
+        </div>
+      </div>
 
-<p><button ng-click="remove()">Remove marked</button></p>
+      <!--Running List -->
+      <div class="col-lg-4">
+        <h2>Running List</h2>
+        <div ng-repeat="x in runningList">
+          <p>
+            <span>processID: {{x.pid}}</span>
+            <span>priority: {{x.priority}}</span>
+          </p>
+        </div>
+      </div>
+
+      <!--Blocked List -->
+      <div class="col-lg-4">
+        <h2>Blocked List</h2>
+        <div ng-repeat="x in blockedList">
+          <p>
+            <span>processID {{x.pid}}</span>
+            <span>priority {{x.priority}}</span>
+          </p>
+        </div>
+      </div>
+
+      <p><button ng-click="remove()">Remove marked</button></p>
+    </div>
+  </div>
 
 </body>
 </html>
