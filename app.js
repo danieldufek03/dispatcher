@@ -64,7 +64,9 @@ app.controller('dispatchCtrl', function($scope) {
 
   // dispatch process with the highest priority from the ready queue
   $scope.dispatch = function() {
-    $scope.runningList.push($scope.readyQueue[0]);
-    $scope.readyQueue.splice(0,1);
+    if($scope.readyQueue.length !== 0){
+      $scope.runningList.push($scope.readyQueue[0]);
+      $scope.readyQueue.splice(0,1);
+    }
   };
 });
