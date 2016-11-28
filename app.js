@@ -1,7 +1,9 @@
 var app = angular.module('myApp', []);
 app.controller('dispatchCtrl', function($scope) {
+
   // Global for creating process id's
   PID = 1;
+
   // Template for creating processes
   function process(prio){
     this.pid = PID;
@@ -28,9 +30,6 @@ app.controller('dispatchCtrl', function($scope) {
   // TODO MIGHT NEED THIS WILL PROBABLY GO UNUSED
   $scope.allProcesses = $scope.readyQueue.concat($scope.runningList, $scope.blockedList);
 
-  // TODO remove this
-  $scope.todoList = [{todoText:'Clean House', done:false}];
-
   // add a new process to the ready queue
   $scope.readyQueueAdd = function(){
     var p = new process($scope.todoInput);
@@ -48,11 +47,13 @@ app.controller('dispatchCtrl', function($scope) {
     $scope.runningList.splice(index,1);
   };
 
+  // Block a currently running process
   $scope.block = function(index) {
     $scope.blockedList.push($scope.runningList[index]);
     $scope.runningList.splice(index,1);
   };
 
+  // unblock a blocked process sending it back to the ready Queue
   $scope.unblock = function(index) {
     $scope.readyQueue.push($scope.blockedList[index]);
     $scope.readyQueue.sort(function (a,b) {
@@ -61,9 +62,9 @@ app.controller('dispatchCtrl', function($scope) {
     $scope.blockedList.splice(index,1);
   };
 
+  // dispatch process with the highest priority from the ready queue
   $scope.dispatch = function() {
     $scope.runningList.push($scope.readyQueue[0]);
     $scope.readyQueue.splice(0,1);
   };
-
 });
