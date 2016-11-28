@@ -1,27 +1,39 @@
 var app = angular.module('myApp', []);
 app.controller('dispatchCtrl', function($scope) {
+  // Global for creating process id's
+  PID = 1;
   // Template for creating processes
-  function process(processID, prio){
-    this.pid = processID;
+  function process(prio){
+    this.pid = PID;
+    PID++;
     this.priority = prio;
   }
-  var a = new process(1, 4);
-  var b = new process(2, 3);
+
+  // Initial processes
+  var a = new process(4);
+  var b = new process(4);
+  var c = new process(3);
+  var d = new process(1);
+  var e = new process(9);
+
   console.log("processID: " + a.pid);
   console.log("priority: " + a.priority);
   console.log("processID: " + b.pid);
   console.log("priority: " + b.priority);
 
-  $scope.readyQueue = [a, b];
-  $scope.runningList = [a, b];
-  $scope.blockedList = [a, b];
-  console.log($scope.runningList[1]);
+  $scope.readyQueue = [a];
+  $scope.runningList = [b, c];
+  $scope.blockedList = [d, e];
+
+  // TODO MIGHT NEED THIS WILL PROBABLY GO UNUSED
+  $scope.allProcesses = $scope.readyQueue.concat($scope.runningList, $scope.blockedList);
 
   // TODO remove this
   $scope.todoList = [{todoText:'Clean House', done:false}];
 
+  // add a new process to the ready queue
   $scope.readyQueueAdd = function(){
-    var p = new process($scope.readyQueue.length + 1, $scope.todoInput);
+    var p = new process($scope.todoInput);
     $scope.readyQueue.push(p);
     // reset input
     $scope.todoInput = "";
@@ -31,17 +43,27 @@ app.controller('dispatchCtrl', function($scope) {
     });
   };
 
-// TODO remove old code below this line
-  $scope.todoAdd = function() {
-    $scope.todoList.push({todoText:$scope.todoInput, done:false});
-    $scope.todoInput = "";
+  // Terminate a currently running process
+  $scope.remove = function(index) {
+    $scope.runningList.splice(index,1);
   };
 
-  $scope.remove = function() {
-    var oldList = $scope.todoList;
-    $scope.todoList = [];
-    angular.forEach(oldList, function(x) {
-      if (!x.done) $scope.todoList.push(x);
-    });
+  $scope.block = function(index) {
+    $scope.blockedList.push($scope.runningList[index]);
+    $scope.runningList.splice(index,1);
   };
+
+  $scope.unblock = function(index) {
+    $scope.readyQueue.push($scope.blockedList[index]);
+    $scope.readyQueue.sort(function (a,b) {
+      return a.priority - b.priority;
+    });
+    $scope.blockedList.splice(index,1);
+  };
+
+  $scope.dispatch = function() {
+    $scope.runningList.push($scope.readyQueue[0]);
+    $scope.readyQueue.splice(0,1);
+  };
+
 });

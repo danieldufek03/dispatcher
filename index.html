@@ -8,19 +8,21 @@
   <div class="container-fluid">
     <div class="row">
 
+      <!--New process  -->
     <h1>Process Dispatcher</h1>
-
-    <!-- <form ng-submit="todoAdd()"> -->
     <form ng-submit="readyQueueAdd()">
-      <input type="text" ng-model="todoInput" size="50" placeholder="Add New priority">
-      <input type="submit" value="Create Process">
+      <input type="number" ng-model="todoInput" placeholder="Priority">
+      <input type="submit" value="Create New Process">
     </form>
 
     <br>
 
       <!--Ready Queue -->
       <div class="col-lg-4">
-        <h2>Ready Queue</h2>
+        <span>
+        <h2>Ready Queue <button ng-click="dispatch()">Dispatch</button></h2>
+
+      </span>
         <div ng-repeat="x in readyQueue">
           <p>
             <span>processID: {{x.pid}}</span>
@@ -36,6 +38,8 @@
           <p>
             <span>processID: {{x.pid}}</span>
             <span>priority: {{x.priority}}</span>
+            <button ng-click="remove($index)">Terminate Process</button>
+            <button ng-click="block($index)">Block Process</button>
           </p>
         </div>
       </div>
@@ -47,11 +51,10 @@
           <p>
             <span>processID {{x.pid}}</span>
             <span>priority {{x.priority}}</span>
+            <button ng-click="unblock($index)">Unblock Process</button>
           </p>
         </div>
       </div>
-
-      <p><button ng-click="remove()">Remove marked</button></p>
     </div>
   </div>
 
